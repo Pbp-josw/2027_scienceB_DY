@@ -1,0 +1,617 @@
+/**
+ * 대영중학교 과학 허브 플랫폼 메인 스타일시트 [DEFAULT BASELINE]
+ * Style Concept: Aurora Neo-Brutalism (Gaussian Color Blobs + Bold 3D Brutalism)
+ */
+
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css');
+
+:root {
+  /* 듀오톤 기본 팔레트 */
+  --bg-main: #F4F4F6;        /* 베이스 오프화이트 */
+  --bg-card: #FFFFFF;        /* 카드 내부 순백색 */
+  --text-main: #0B0B0C;      /* 가장 짙고 묵직한 슈퍼 블랙 */
+  --text-muted: #4A4D55;     /* 가독성 높은 보조 텍스트 */
+  
+  --border-thick: 3.5px solid #0B0B0C;
+  --border-thin: 2px solid #0B0B0C;
+  --shadow-hard: 6px 6px 0px #0B0B0C;
+  --shadow-sm: 3px 3px 0px #0B0B0C;
+
+  /* 과학 4대 단원별 시그니처 액센트 */
+  --color-chem: #E8004F;     /* 화학 (에너지 마젠타) */
+  --color-physics: #5200FF;  /* 물리 (포스 바이올렛) */
+  --color-bio: #00C896;      /* 생명 (바이오 민트) */
+  --color-earth: #FFB800;    /* 지구 (코스믹 앰버) */
+
+  --font-family: 'NanumSquareNeo', 'NanumSquare', -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  line-height: 1.5;
+  padding-bottom: 90px;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* [핵심] 배경에 몽환적으로 은은하게 퍼지는 4색 가우시안 블러 오브 (Aurora Canvas) */
+.bg-glow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+  filter: blur(90px); /* 몽환적인 가우시안 블러 */
+  opacity: 0.22;       /* 미니멀리즘을 해치지 않는 은은한 투명도 */
+}
+.glow-blob {
+  position: absolute;
+  border-radius: 50%;
+}
+.blob-1 { /* 보라/물리 */
+  width: 550px;
+  height: 550px;
+  background: var(--color-physics);
+  top: -100px;
+  left: -80px;
+}
+.blob-2 { /* 마젠타/화학 */
+  width: 500px;
+  height: 500px;
+  background: var(--color-chem);
+  top: 15%;
+  right: -120px;
+}
+.blob-3 { /* 민트/생명 */
+  width: 600px;
+  height: 600px;
+  background: var(--color-bio);
+  bottom: 10%;
+  left: 5%;
+}
+.blob-4 { /* 옐로우/지구 */
+  width: 480px;
+  height: 480px;
+  background: var(--color-earth);
+  bottom: -150px;
+  right: 10%;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 1. 플랫폼 메인 헤더 */
+.hub-header {
+  padding: 56px 0 32px;
+  border-bottom: var(--border-thick);
+  margin-bottom: 36px;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+.school-badge {
+  display: inline-block;
+  background: var(--text-main);
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 5px 14px;
+  border-radius: 6px;
+  letter-spacing: 1.5px;
+}
+.stamp-cluster {
+  display: flex;
+  gap: 8px;
+}
+.mini-stamp {
+  width: 40px;
+  height: 40px;
+  border: 2.5px solid var(--text-main);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 900;
+  background: #FFFFFF;
+  box-shadow: 2px 2px 0px #0B0B0C;
+}
+
+/* 1. 메인 타이틀: 흰색 글자 + 검은 외곽선 + 3D 검은 그림자 (단 1개 단독 렌더링) */
+.hub-title {
+  font-size: clamp(38px, 6.5vw, 62px);
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin: 10px 0 16px;
+  
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important; /* 순백색 글자 */
+  -webkit-text-stroke: 2.5px #0B0B0C;          /* 선명한 블랙 윤곽선 */
+  paint-order: stroke fill;
+  text-shadow: 5px 5px 0px #0B0B0C;           /* 견고한 3D 하드 섀도우 */
+  
+  display: inline-block;
+  user-select: none;
+  cursor: zoom-in;
+}
+
+/* 마우스 주변을 따라다니는 원형 글라스 돋보기 렌즈 */
+.magnifier-lens {
+  position: fixed;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 3.5px solid #0B0B0C;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 
+    0 12px 28px rgba(0, 0, 0, 0.35),
+    0 0 0 4px rgba(255, 255, 255, 0.9),
+    inset 0 0 16px rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  overflow: hidden;
+  display: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+}
+.magnifier-lens::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 14px;
+  width: 38px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+.magnifier-lens-content {
+  position: absolute;
+  pointer-events: none;
+  white-space: nowrap;
+  transform-origin: 0 0;
+  display: inline-block;
+}
+
+/* 2. 배경 가우시안 영역 마우스 오버 시 떠오르는 과학 명언 플로팅 카드 */
+.quote-floating-card {
+  position: fixed;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2.5px solid #0B0B0C;
+  border-radius: 12px;
+  box-shadow: 4px 4px 0px #0B0B0C;
+  padding: 12px 18px;
+  max-width: 320px;
+  z-index: 100;
+  opacity: 0;
+  transform: translate(15px, 15px) scale(0.95);
+  transition: opacity 0.25s ease, transform 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+.quote-floating-card.active {
+  opacity: 1;
+  transform: translate(18px, 18px) scale(1);
+}
+.quote-text {
+  font-size: 13px;
+  font-weight: 800;
+  color: #0B0B0C;
+  line-height: 1.45;
+  margin-bottom: 4px;
+}
+.quote-author {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--color-physics);
+  text-align: right;
+}
+.hub-subtitle {
+  font-size: 19px;
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+/* 2. 빠른 학생 입장 & 교사 모드 배너 */
+.action-banner {
+  background: #FFFFFF;
+  border: var(--border-thick);
+  border-radius: 14px;
+  box-shadow: var(--shadow-hard);
+  padding: 20px 28px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.login-quick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.quick-input {
+  background: #EAEAEA;
+  border: 2.5px solid var(--text-main);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 14px;
+  font-weight: 900;
+  font-family: var(--font-family);
+  box-shadow: inset 2px 2px 4px rgba(0,0,0,0.12);
+  outline: none;
+  width: 135px;
+}
+.quick-input:focus {
+  background: #FFFFFF;
+  border-color: var(--color-physics);
+}
+.btn-enter {
+  background: var(--text-main);
+  color: #FFFFFF;
+  border: 2.5px solid var(--text-main);
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 3px 3px 0px var(--color-physics);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+.btn-enter:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--color-physics);
+}
+
+.mode-toggle {
+  display: flex;
+  gap: 6px;
+  background: #EAEAEA;
+  padding: 4px;
+  border: 2.5px solid var(--text-main);
+  border-radius: 10px;
+}
+.toggle-btn {
+  background: transparent;
+  border: none;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 900;
+  font-family: var(--font-family);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.toggle-btn.active {
+  background: var(--text-main);
+  color: #FFFFFF;
+  box-shadow: 1px 1px 0px rgba(0,0,0,0.3);
+}
+
+/* 3. 과목/학년 탭 (스크롤 완전 제거, 자연스러운 줄바꿈 & 배경 조화) */
+.subject-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: var(--border-thick);
+  padding-bottom: 14px;
+  overflow: visible; /* 스크롤바 영구 제거 */
+}
+.tab-btn {
+  background: #FFFFFF;
+  border: var(--border-thick);
+  border-radius: 12px;
+  padding: 10px 22px;
+  font-size: 16px;
+  font-weight: 900;
+  font-family: var(--font-family);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.08s, box-shadow 0.08s;
+  white-space: nowrap;
+}
+.tab-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #0B0B0C;
+}
+.tab-btn[aria-selected="true"] {
+  background: var(--text-main);
+  color: #FFFFFF;
+}
+
+/* 교사 모드 전용: [+ 학년 추가] 버튼 */
+.btn-add-grade {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background: #FFFFFF;
+  color: var(--color-physics);
+  border: 2.5px dashed var(--color-physics);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 900;
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+body.is-teacher-mode .btn-add-grade {
+  display: inline-flex;
+}
+.btn-add-grade:hover {
+  background: var(--color-physics);
+  color: #FFFFFF;
+  border-style: solid;
+  box-shadow: var(--shadow-sm);
+}
+
+/* 4. 대단원 카드 & 아코디언 */
+.unit-card {
+  background: #FFFFFF;
+  border: var(--border-thick);
+  border-radius: 16px;
+  box-shadow: var(--shadow-hard);
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.unit-summary {
+  list-style: none;
+  padding: 24px 28px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FFFFFF;
+  border-bottom: 2px solid transparent;
+  transition: background 0.1s;
+  user-select: none;
+}
+.unit-summary::-webkit-details-marker { display: none; }
+.unit-card[open] .unit-summary {
+  border-bottom: var(--border-thick);
+  background: #FAFAFB;
+}
+.unit-title-group {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.unit-stamp {
+  width: 52px;
+  height: 52px;
+  border: 2.5px solid var(--text-main);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 900;
+  box-shadow: 3px 3px 0px #0B0B0C;
+  background: #FFFFFF;
+  transition: all 0.25s ease;
+}
+/* [요청 4] 단원 완료 시: 배경은 코랄색 채움 + 글자 흰색 + 테두리는 굵은 검은색(#0B0B0C)! */
+.unit-stamp.all-done {
+  background: var(--stamp-active-color, #E8004F) !important;
+  color: #FFFFFF !important;
+  border: 3px solid #0B0B0C !important; /* 요청하신 검은색 테두리 */
+  box-shadow: 4px 4px 0px #0B0B0C;
+}
+.unit-badge {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+.unit-heading {
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  display: inline-block;
+}
+/* 수업 제목들은 억지 효과 없이 원래의 단정하고 묵직한 포스터 스타일 유지 */
+
+/* 5. 차시 리스트 & 개별 차시 행 (Lesson Rows) 정밀 레이아웃 */
+.lesson-list {
+  background: #FFFFFF;
+}
+.lesson-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 26px;
+  border-bottom: 2px solid #EBECEF;
+  gap: 20px;
+  transition: background-color 0.15s ease;
+}
+.lesson-row:last-child {
+  border-bottom: none;
+}
+.lesson-row:hover {
+  background-color: #FAFAFB;
+}
+
+.lesson-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+/* 체크 서클 뱃지: 미완료 시 깔끔한 빈 원, 완료 시 민트색 채움 + 블랙 체크 */
+.lesson-check-circle-mini {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #0B0B0C;
+  border-radius: 50%;
+  background: #FFFFFF;
+  font-size: 13px;
+  font-weight: 900;
+  color: transparent;
+  user-select: none;
+  box-shadow: 1.5px 1.5px 0px #0B0B0C;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+body.is-teacher-mode .lesson-check-circle-mini {
+  cursor: pointer;
+}
+body.is-teacher-mode .lesson-check-circle-mini:hover {
+  transform: scale(1.18);
+  box-shadow: 2px 2px 0px #0B0B0C;
+}
+.lesson-check-circle-mini.completed {
+  background: #00C896 !important;
+  color: #0B0B0C !important;
+  border-color: #0B0B0C !important;
+}
+
+/* 1차시, 2차시 라운드 블랙 배지 */
+.lesson-num {
+  background: #0B0B0C;
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 900;
+  padding: 5px 12px;
+  border-radius: 7px;
+  display: inline-block;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+/* 차시 제목 */
+.lesson-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: #0B0B0C;
+  letter-spacing: -0.3px;
+}
+
+/* 탐구 질문 (세련된 하이라이트 박스) */
+.lesson-question {
+  font-size: 14px;
+  font-weight: 800;
+  color: #475569;
+  background: #F1F5F9;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1.5px solid #E2E8F0;
+  display: inline-block;
+}
+
+/* 메인 정보 (페이지 / 슬라이드 수) */
+.lesson-meta {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #94A3B8;
+  white-space: nowrap;
+}
+
+/* 6. 택타일 액션 버튼 그룹 (3D Chunky Buttons) */
+.btn-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 900;
+  font-family: var(--font-family);
+  border: 2.5px solid #0B0B0C;
+  border-radius: 9px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.08s, box-shadow 0.08s;
+  user-select: none;
+  white-space: nowrap;
+}
+.btn-teacher {
+  background: var(--color-physics);
+  color: #FFFFFF;
+  box-shadow: 3.5px 3.5px 0px #0B0B0C;
+}
+.btn-student {
+  background: var(--color-chem);
+  color: #FFFFFF;
+  box-shadow: 3.5px 3.5px 0px #0B0B0C;
+}
+.btn-worksheet {
+  background: #FFFFFF;
+  color: var(--text-main);
+  box-shadow: 3.5px 3.5px 0px #0B0B0C;
+}
+.btn-action:hover {
+  transform: translateY(-1.5px);
+  box-shadow: 4.5px 4.5px 0px #0B0B0C;
+}
+.btn-action:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1.5px 1.5px 0px #0B0B0C;
+}
+
+/* 7. 교사용 인라인 직접 편집 (In-place Click to Edit) 스타일 */
+body.is-teacher-mode .editable-field {
+  cursor: text;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin: -2px -6px;
+  transition: background-color 0.12s, outline 0.12s;
+}
+body.is-teacher-mode .editable-field:hover {
+  background-color: #FEF08A; /* 연노랑 형광펜 하이라이트 */
+  outline: 2px dashed #CA8A04;
+}
+body.is-teacher-mode .editable-field:focus {
+  background-color: #FFFFFF;
+  outline: 2.5px solid #5200FF;
+  box-shadow: 0 0 0 3px rgba(82, 0, 255, 0.15);
+}
+
+/* 반응형 모바일 최적화 */
+@media (max-width: 768px) {
+  .lesson-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .btn-group {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .action-banner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

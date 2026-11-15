@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>대영중학교 과학 학습지 - 복사 평형을 이루는 지구</title>
+<link rel="stylesheet" href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css">
+<style>
+  :root {
+    --text-main: #0F0F0F;
+    --border-color: #0F0F0F;
+    --bg-page: #FFFFFF;
+    --font-main: 'NanumSquareNeo', 'NanumSquare', sans-serif;
+    --accent-earth: #FFB800; /* 지구과학 포인트 */
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: #E5E7EB;
+    font-family: var(--font-main);
+    color: var(--text-main);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* 표준 A4 규격 학습지 용지 */
+  .worksheet-page {
+    width: 210mm;
+    min-height: 297mm;
+    background: var(--bg-page);
+    padding: 12mm 14mm;
+    border: 1px solid #D1D5DB;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 헤더 영역 */
+  .sheet-header {
+    border-top: 2px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
+    padding: 8px 4px;
+    display: grid;
+    grid-template-columns: 80px 1fr 150px;
+    align-items: center;
+    gap: 12px;
+  }
+  .stamp-slot {
+    width: 76px;
+    height: 76px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 14px;
+    text-align: center;
+    background: #FAFAFA;
+  }
+  .title-area {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .meta-top {
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+  }
+  .sheet-title {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    text-align: center;
+    margin: 2px 0;
+  }
+  .curriculum-info {
+    border-left: 2px solid var(--border-color);
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  /* 학습 목표 바 */
+  .target-bar {
+    border: 2px solid var(--border-color);
+    border-top: none;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .badge-target {
+    background: var(--border-color);
+    color: #FFFFFF;
+    font-weight: 900;
+    font-size: 13px;
+    padding: 3px 12px;
+    border-radius: 3px;
+  }
+  .target-content {
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  /* 2단 다단 그리드 본문 */
+  .sheet-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+  }
+  .sheet-column {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* 모듈 박스 (카드) */
+  .module-box {
+    border: 1.5px solid var(--border-color);
+    padding: 8px 10px;
+    font-size: 12.5px;
+    line-height: 1.5;
+  }
+
+  /* 6대 카테고리 뱃지 헤더 */
+  .module-header {
+    margin-bottom: 6px;
+  }
+  .cat-badge {
+    display: inline-block;
+    background: var(--border-color);
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+
+  /* 텍스트 리스트 & 넘버링 */
+  .num-title {
+    font-weight: 800;
+    margin-top: 4px;
+  }
+  .sub-list {
+    padding-left: 4px;
+  }
+
+  /* 인터랙티브 빈칸 (화면에서는 클릭 시 정답 토글, 인쇄 시 밑줄) */
+  .blank {
+    display: inline-block;
+    min-width: 50px;
+    border-bottom: 1px solid var(--border-color);
+    text-align: center;
+    font-weight: 800;
+    color: #2563EB;
+    cursor: pointer;
+    user-select: none;
+    padding: 0 4px;
+  }
+
+  /* 인포그래픽 / 모식도 비교 프레임 */
+  .fig-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin: 6px 0;
+  }
+  .fig-card {
+    border: 1px solid #9CA3AF;
+    padding: 6px;
+    text-align: center;
+    background: #F9FAFB;
+  }
+  .fig-caption {
+    font-weight: 800;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  /* 테이블 서식 */
+  .sheet-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0;
+    font-size: 11.5px;
+    text-align: center;
+  }
+  .sheet-table th, .sheet-table td {
+    border: 1px solid var(--border-color);
+    padding: 4px 6px;
+  }
+  .sheet-table th {
+    background: #F3F4F6;
+    font-weight: 800;
+  }
+
+  /* 인쇄 전용 규칙 */
+  @media print {
+    body {
+      background: none;
+      padding: 0;
+    }
+    .worksheet-page {
+      box-shadow: none;
+      border: none;
+      padding: 10mm 12mm;
+    }
+    .blank {
+      color: transparent !important; /* 학생용 출력 시 빈칸으로 숨김 */
+    }
+    body.show-answers .blank {
+      color: #000000 !important; /* 교사용 정답본 출력 시 표시 */
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="worksheet-page">
+  <!-- 헤더 -->
+  <header class="sheet-header">
+    <div class="stamp-slot">
+      <span>地球科學<br>(도장)</span>
+    </div>
+    <div class="title-area">
+      <div class="meta-top">
+        <span>3학년 ( &nbsp; )반 ( &nbsp; )번 이름: _________</span>
+        <span>교과서 54 - 55p ■■■</span>
+      </div>
+      <h1 class="sheet-title">복사 평형을 이루는 지구</h1>
+    </div>
+    <div class="curriculum-info">
+      <div>대단원: Ⅱ. 기권과 날씨</div>
+      <div>중단원: 1. 기권과 지구 기온</div>
+    </div>
+  </header>
+
+  <!-- 학습 목표 바 -->
+  <div class="target-bar">
+    <span class="badge-target">학습 목표</span>
+    <span class="target-content">복사 평형 원리를 설명할 수 있다.</span>
+  </div>
+
+  <!-- 2단 그리드 본문 -->
+  <main class="sheet-grid">
+    <!-- 좌측 열 -->
+    <div class="sheet-column">
+      <!-- 모듈 1: 참고 | 전자기파 -->
+      <section class="module-box">
+        <div class="module-header">
+          <span class="cat-badge">참고 | 전자기파</span>
+        </div>
+        <div class="num-title">1. 전자기파</div>
+        <div class="sub-list">
+          <div>1) 전기장과 자기장이 공간상으로 ( <span class="blank">방사</span> )되는 파동</div>
+          <div>2) ( <span class="blank">전자기장</span> )(+전하)이 진동하여 생기는 파동</div>
+          <div>3) ( <span class="blank">빛</span> ), 광선 등</div>
+        </div>
+        <div class="num-title" style="margin-top:6px;">2. 복사</div>
+        <div class="sub-list">
+          <div>1) 파동이 물체에서 매질 ( <span class="blank">없이</span> ) 사방으로 방출되는 현상</div>
+          <div>2) 파동은 본래 매질을 타고 나가지만, ( <span class="blank">전자기파</span> )는 매질 없이 나갈 수 있다.</div>
+        </div>
+        <!-- 모식도 2열 프레임 -->
+        <div class="fig-grid-2">
+          <div class="fig-card">
+            <div style="height:48px; display:flex; align-items:center; justify-content:center; color:#6B7280;">[전자기파 파동도]</div>
+            <div class="fig-caption">전자기파</div>
+          </div>
+          <div class="fig-card">
+            <div style="height:48px; display:flex; align-items:center; justify-content:center; color:#6B7280;">[열선 방출 모식도]</div>
+            <div class="fig-caption">복사</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 모듈 2: 참고 | 동적 평형 -->
+      <section class="module-box">
+        <div class="module-header">
+          <span class="cat-badge">참고 | 동적 평형</span>
+        </div>
+        <div class="num-title">1. 평형</div>
+        <div>1) 주어진 계에 ( <span class="blank">알짜 변화</span> )가 없는 경우</div>
+        <div class="num-title" style="margin-top:4px;">2. 평형의 종류</div>
+        <table class="sheet-table">
+          <tr><th>평형</th><th>종류</th></tr>
+          <tr><td style="font-weight:700;">정적 평형</td><td>역학적 평형 1: F = 0 &middot; 2: &tau; = 0</td></tr>
+          <tr><td style="font-weight:700;">동적 평형</td><td>화학적 평형 &middot; 상평형 &middot; 복사 평형</td></tr>
+        </table>
+      </section>
+
+      <!-- 모듈 3: 개념 | 복사 평형 -->
+      <section class="module-box">
+        <div class="module-header">
+          <span class="cat-badge">개념 | 복사 평형</span>
+        </div>
+        <div class="num-title">1) 복사 평형의 개념</div>
+        <div class="sub-list">
+          <div>가) 어떤 물체가 ( <span class="blank">흡수</span> )하는 복사 에너지량과 ( <span class="blank">방출</span> )하는 복사 에너지량이 같다.</div>
+          <div>나) 복사 평형이 일어나면, ( <span class="blank">열평형</span> ) 상태에 도달하여 온도가 변하지 않는다.</div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 우측 열 -->
+    <div class="sheet-column">
+      <!-- 모듈 4: 복사 평형의 관측 -->
+      <section class="module-box">
+        <div class="num-title">2) 복사 평형의 관측</div>
+        <div class="sub-list">
+          <div>1) 복사 평형은 물체의 에너지 출입량이 같을 때 일어난다.</div>
+          <div>2) 에너지는 ( <span class="blank">열</span> )의 형태로 출입하고, ( <span class="blank">온도</span> )와 관련이 있다.</div>
+          <div>3) 따라서 ( <span class="blank">온도</span> ) 변화로 관측한다.</div>
+        </div>
+        <!-- 실험 장치 및 그래프 모식도 2열 -->
+        <div class="fig-grid-2">
+          <div class="fig-card">
+            <div style="height:56px; display:flex; align-items:center; justify-content:center; color:#6B7280;">[알루미늄 컵 & 전등]</div>
+            <div class="fig-caption">복사 평형 실험 장치</div>
+          </div>
+          <div class="fig-card">
+            <div style="height:56px; display:flex; align-items:center; justify-content:center; color:#6B7280;">[온도 상승 후 평형 그래프]</div>
+            <div class="fig-caption">온도 변화 측정</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 모듈 5: 참고 | 동적 평형과 사고의 확장 (STEAM) -->
+      <section class="module-box">
+        <div class="module-header">
+          <span class="cat-badge">참고 | 동적 평형과 사고의 확장</span>
+        </div>
+        <div class="num-title">1. 관성 (물리 연계)</div>
+        <div class="sub-list">
+          <div>(1) 알짜힘이 0이면, 물체의 ( <span class="blank">운동 상태</span> )가 변하지 않는다.</div>
+          <div>(2) 물질은 일정한 ( <span class="blank">평형</span> ) 상태와 ( <span class="blank">최저</span> ) 에너지를 지향한다.</div>
+        </div>
+        <div class="num-title" style="margin-top:6px;">2. 음성 피드백 (생명과학 연계)</div>
+        <div class="sub-list">
+          <div>1) 생물체는 ( <span class="blank">항상성</span> )을 유지하기 위해 호르몬을 조절한다.</div>
+          <div>2) 혈당이 오르면 인슐린을 분비해 낮추는 현상이 대표적이다.</div>
+        </div>
+      </section>
+
+      <!-- 모듈 6: 참고 | 흑체 -->
+      <section class="module-box">
+        <div class="module-header">
+          <span class="cat-badge">참고 | 흑체</span>
+        </div>
+        <div class="sub-list">
+          <div>1) 모든 전자기파를 흡수하는(반사하지 않는) 이상적인 물체</div>
+          <div>2) ( <span class="blank">열평형</span> ) 상태의 흑체는 흑체 복사로 에너지를 방출한다.</div>
+          <div>3) ( <span class="blank">모든</span> ) 물체는 복사의 형태로 에너지를 흡수하고 방출한다.</div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

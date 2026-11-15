@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>2027학년도 과학B · 대영중학교 과학 허브 [기본값 원본]</title>
+<link rel="stylesheet" href="hub.css">
+</head>
+<body>
+
+<!-- [배경] 4색 가우시안 오로라 캔버스 -->
+<div class="bg-glow-container">
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+  <div class="glow-blob blob-3"></div>
+  <div class="glow-blob blob-4"></div>
+</div>
+
+<div class="container">
+  <!-- 1. 메인 헤더 영역 -->
+  <header class="hub-header">
+    <div class="header-top">
+      <span class="school-badge">DAEYOUNG MIDDLE SCHOOL &middot; SCIENCE LAB</span>
+      <div class="stamp-cluster">
+        <div class="mini-stamp" title="물리">物</div>
+        <div class="mini-stamp" title="화학">化</div>
+        <div class="mini-stamp" title="생명">生</div>
+        <div class="mini-stamp" title="지구">地</div>
+      </div>
+    </div>
+    
+    <!-- 2027학년도 과학B 단일 깔끔한 타이틀 -->
+    <h1 class="hub-title" id="mainTitle">2027학년도 과학B</h1>
+    <p class="hub-subtitle">손으로 직접 움직이며 탐구하는 모듈형 인터랙티브 실험실 &middot; 대영중학교</p>
+  </header>
+
+  <!-- 2. 제로 가입 간편 입장 & 교사 모드 배너 -->
+  <section class="action-banner">
+    <div class="login-quick">
+      <span style="font-weight: 900; font-size: 15px;">🚀 수업 입장:</span>
+      <input type="text" class="quick-input" placeholder="수업코드 4자리" maxlength="4" value="7042">
+      <input type="text" class="quick-input" placeholder="학번 (예: 30115)" maxlength="5">
+      <input type="text" class="quick-input" placeholder="이름 (홍길동)" maxlength="5">
+      <button class="btn-enter" onclick="alert('2027 과학B 연구실에 입장했습니다! (닉네임: 빛의 속도)')">입장하기</button>
+    </div>
+    <div class="mode-toggle">
+      <button class="toggle-btn active" id="btnRoleStudent">학생 모드</button>
+      <button class="toggle-btn" id="btnRoleTeacher">교사 모드 (관리)</button>
+    </div>
+  </section>
+
+  <!-- 3. 학년 탭 네비게이션 (스크롤 완전 제거, 교사모드에서 학년/단원 추가) -->
+  <nav class="subject-tabs" id="gradeTabs">
+    <!-- JS로 학년 버튼들이 동적 생성되며, 교사모드 시 [+ 학년 추가] 버튼이 함께 나타남 -->
+  </nav>
+
+  <!-- 4. 단원별 아코디언 및 차시 목록 컨테이너 (curriculum.json 기반 동적 렌더링) -->
+  <main id="curriculumList">
+    <!-- JS로 학년/단원/차시 카드가 자동으로 렌더링됨 -->
+  </main>
+</div>
+
+<!-- 마우스 주변을 따라다니는 글라스 원형 돋보기 렌즈 -->
+<div class="magnifier-lens" id="globalMagnifierLens">
+  <div class="magnifier-lens-content" id="magnifierLensContent"></div>
+</div>
+
+<!-- 5. 배경 가우시안 영역 마우스 오버 시 떠오르는 과학 명언 플로팅 카드 -->
+<div class="quote-floating-card" id="quoteCard">
+  <div class="quote-text" id="quoteText">&ldquo;자연이라는 위대한 책은 수학의 언어로 쓰여 있다.&rdquo;</div>
+  <div class="quote-author" id="quoteAuthor">&mdash; 갈릴레오 갈릴레이</div>
+</div>
+
+<script>
+  // 1. 교육과정 데이터 (curriculum.json 비동기 로드 + 오프라인 폴백 내장)
+  let curriculumData = [];
+  let currentGradeId = "grade-3";
+  let isTeacherMode = false;
+
+  function saveCurriculumData() {
+    localStorage.setItem('daeyoung_curriculum_data', JSON.stringify(curriculumData));
+  }
+
+  async function loadCurriculum() {
+    const saved = localStorage.getItem('daeyoung_curriculum_data');
+    if (saved) {
+      try {
+        curriculumData = JSON.parse(saved);
+        renderGradeTabs();
+        renderCurriculum();
+        return;
+      } catch (e) {
+        console.warn('저장 데이터 파싱 실패, 원본 로드');
+      }
+    }
+
+    try {
+      const res = await fetch('curriculum.json');
+      if (!res.ok) throw new Error();
+      curriculumData = await res.json();
+    } catch (e) {
+      // 로컬 파일 더블클릭 실행(file://) 시 CORS 제한 대비 기본 데이터 폴백
+      curriculumData = [
+        {
+          "gradeId": "grade-3",
+          "gradeName": "3학년 과학B",
+          "units": [
+            {
+              "unitId": "unit-3-chem-1",
+              "subject": "화학",
+              "stamp": "化",
+              "color": "#E8004F",
+              "major": "Ⅰ. 화학 반응의 규칙과 에너지 변화",
+              "minor": "2. 화학 반응의 규칙",
+              "title": "일정한 질량비로 결합하는 원소",
+              "lessons": [
+                { "n": 1, "title": "일정 성분비 법칙_모형 해석", "question": "A와 2B는 왜 항상 일정한 질량비로 결합할까?", "pages": "32~33p", "slides": 10 },
+                { "n": 2, "title": "한계 반응물과 양적 관계", "question": "구리와 산소가 반응할 때 한쪽이 남으면 어떻게 될까?", "pages": "34~35p", "slides": 12 }
+              ]
+            },
+            {
+              "unitId": "unit-3-chem-2",
+              "subject": "화학",
+              "stamp": "化",
+              "color": "#E8004F",
+              "major": "Ⅰ. 화학 반응의 규칙과 에너지 변화",
+              "minor": "3. 화학 반응에서의 에너지 출입",
+              "title": "에너지가 출입하는 화학 반응",
+              "lessons": [
+                { "n": 1, "title": "발열 반응과 흡열 반응", "question": "어떤 반응은 주변을 뜨겁게, 어떤 반응은 차갑게 만들까?", "pages": "42~43p", "slides": 10 }
+              ]
+            },
+            {
+              "unitId": "unit-3-earth-1",
+              "subject": "지구과학",
+              "stamp": "地",
+              "color": "#FFB800",
+              "major": "Ⅱ. 기권과 날씨",
+              "minor": "1. 기권과 지구 기온",
+              "title": "복사 평형을 이루는 지구",
+              "lessons": [
+                { "n": 1, "title": "복사 평형 원리와 흑체", "question": "지구가 태양 에너지를 계속 받는데 왜 무한정 뜨거워지지 않을까?", "pages": "54~55p", "slides": 10 }
+              ]
+            }
+          ]
+        },
+        {
+          "gradeId": "grade-2",
+          "gradeName": "2학년 과학B",
+          "units": [
+            {
+              "unitId": "unit-2-phys-1",
+              "subject": "물리",
+              "stamp": "物",
+              "color": "#5200FF",
+              "major": "Ⅰ. 물질의 구성",
+              "minor": "1. 원소와 원자",
+              "title": "물질을 이루는 기본 성분",
+              "lessons": [
+                { "n": 1, "title": "원소의 구별과 불꽃 반응", "question": "눈에 보이지 않는 원소를 어떻게 색깔로 구별할 수 있을까?", "pages": "14~17p", "slides": 8 }
+              ]
+            }
+          ]
+        },
+        {
+          "gradeId": "grade-1",
+          "gradeName": "1학년 과학B",
+          "units": [
+            {
+              "unitId": "unit-1-bio-1",
+              "subject": "생명과학",
+              "stamp": "生",
+              "color": "#00C896",
+              "major": "Ⅰ. 지권의 변화",
+              "minor": "1. 생물의 다양성",
+              "title": "생물 다양성과 분류",
+              "lessons": [
+                { "n": 1, "title": "생물 다양성의 의미와 중요성", "question": "생태계에서 왜 다양한 생물이 공존해야 할까?", "pages": "12~15p", "slides": 8 }
+              ]
+            }
+          ]
+        }
+      ];
+    }
+    renderGradeTabs();
+    renderCurriculum();
+  }
+
+  // 2. 학년 탭 렌더링
+  function renderGradeTabs() {
+    const tabsContainer = document.getElementById('gradeTabs');
+    tabsContainer.innerHTML = '';
+    
+    curriculumData.forEach((grade) => {
+      const btn = document.createElement('button');
+      btn.className = 'tab-btn';
+      btn.setAttribute('aria-selected', grade.gradeId === currentGradeId ? 'true' : 'false');
+      btn.textContent = grade.gradeName;
+      btn.onclick = () => {
+        currentGradeId = grade.gradeId;
+        renderGradeTabs();
+        renderCurriculum();
+      };
+      tabsContainer.appendChild(btn);
+    });
+
+    const addGradeBtn = document.createElement('button');
+    addGradeBtn.className = 'btn-add-grade';
+    addGradeBtn.innerHTML = '+ 학년 추가';
+    addGradeBtn.onclick = promptNewGrade;
+    tabsContainer.appendChild(addGradeBtn);
+  }
+
+  function promptNewGrade() {
+    const gradeName = prompt("추가할 학년 또는 과목명을 입력하세요 (예: 1학년 과학A, 고1 통합과학):");
+    if (!gradeName) return;
+
+    const newGradeId = "grade-" + Date.now();
+    curriculumData.push({
+      gradeId: newGradeId,
+      gradeName: gradeName,
+      units: [
+        {
+          unitId: "unit-" + Date.now(),
+          subject: "과학",
+          stamp: "科",
+          color: "#5200FF",
+          major: "Ⅰ. 첫 번째 대단원",
+          minor: "1. 소단원",
+          title: "새로운 탐구 단원",
+          lessons: [
+            { n: 1, title: "1차시 수업 시작", question: "오늘의 핵심 질문을 적어주세요", pages: "10~15p", slides: 10 }
+          ]
+        }
+      ]
+    });
+
+    currentGradeId = newGradeId;
+    saveCurriculumData();
+    renderGradeTabs();
+    renderCurriculum();
+    alert(`'${gradeName}'이(가) 추가되었습니다!`);
+  }
+
+  function renderCurriculum() {
+    const mainList = document.getElementById('curriculumList');
+    mainList.innerHTML = '';
+    const currentGrade = curriculumData.find(g => g.gradeId === currentGradeId);
+    if (!currentGrade || !currentGrade.units) return;
+
+    const completedLessons = JSON.parse(localStorage.getItem('daeyoung_completed_lessons') || '[]');
+
+    currentGrade.units.forEach((unit, uIdx) => {
+      const totalLessons = unit.lessons.length;
+      const doneCount = unit.lessons.filter(l => completedLessons.includes(`${currentGrade.gradeId}_${unit.unitId}_${l.n}`)).length;
+      const isUnitAllDone = (totalLessons > 0 && doneCount === totalLessons);
+
+      const details = document.createElement('details');
+      details.className = 'unit-card';
+      details.open = true;
+      details.id = unit.unitId;
+
+      const editableAttr = isTeacherMode ? 'contenteditable="true" spellcheck="false"' : '';
+      const editableClass = isTeacherMode ? 'editable-field' : '';
+
+      details.innerHTML = `
+        <summary class="unit-summary">
+          <div class="unit-title-group">
+            <div class="unit-stamp ${isUnitAllDone ? 'all-done' : ''}" 
+                 style="--stamp-active-color: ${unit.color}; border-color: ${unit.color}; color: ${isUnitAllDone ? '#FFFFFF' : unit.color};">
+              ${unit.stamp}
+            </div>
+            <div>
+              <div class="unit-badge ${editableClass}" ${editableAttr} data-target="unit-badge" data-uid="${unit.unitId}">
+                ${unit.major} &rsaquo; ${unit.minor}
+              </div>
+              <div class="unit-heading ${editableClass}" ${editableAttr} data-target="unit-title" data-uid="${unit.unitId}">
+                ${unit.title}
+              </div>
+            </div>
+          </div>
+          <span class="arrow-icon">&rsaquo;</span>
+        </summary>
+      `;
+
+      const lessonList = document.createElement('div');
+      lessonList.className = 'lesson-list';
+
+      unit.lessons.forEach(l => {
+        const lessonKey = `${currentGrade.gradeId}_${unit.unitId}_${l.n}`;
+        const isDone = completedLessons.includes(lessonKey);
+
+        const row = document.createElement('article');
+        row.className = 'lesson-row';
+        row.innerHTML = `
+          <div class="lesson-info">
+            <span class="lesson-check-circle-mini ${isDone ? 'completed' : ''}" 
+                  title="${isTeacherMode ? (isDone ? '클릭하여 취소' : '클릭하여 완료 표시') : '교사만 완료 체크를 변경할 수 있습니다'}"
+                  onclick="handleCheckClick('${lessonKey}')">
+              ${isDone ? '✓' : ''}
+            </span>
+            <span class="lesson-num">${l.n}차시</span>
+            <span class="lesson-title ${editableClass}" ${editableAttr} 
+                  data-target="lesson-title" data-uid="${unit.unitId}" data-ln="${l.n}">
+              ${l.title}
+            </span>
+            <span class="lesson-question ${editableClass}" ${editableAttr} 
+                  data-target="lesson-question" data-uid="${unit.unitId}" data-ln="${l.n}">
+              &ldquo;${l.question}&rdquo;
+            </span>
+            <span class="lesson-meta ${editableClass}" ${editableAttr} 
+                  data-target="lesson-meta" data-uid="${unit.unitId}" data-ln="${l.n}">
+              ${l.pages} &middot; ${l.slides}슬라이드
+            </span>
+          </div>
+          <div class="btn-group">
+            <a href="worksheet-sample.html" class="btn-action ${isTeacherMode ? 'btn-teacher' : 'btn-student'}">
+              ${isTeacherMode ? '수업 진행 (교사용)' : '수업 참여 (학생용)'}
+            </a>
+            <a href="worksheet-sample.html" class="btn-action btn-worksheet" target="_blank">A4 학습지</a>
+          </div>
+        `;
+        lessonList.appendChild(row);
+      });
+
+      if (isTeacherMode) {
+        const addLessonRow = document.createElement('div');
+        addLessonRow.style.padding = '12px 26px';
+        addLessonRow.style.background = '#F8FAFC';
+        addLessonRow.style.borderTop = '1.5px dashed #CBD5E1';
+        addLessonRow.style.display = 'flex';
+        addLessonRow.style.gap = '10px';
+        addLessonRow.innerHTML = `
+          <button class="btn-action" style="padding: 6px 14px; font-size: 13px; background: #FFFFFF; border-style: dashed;" 
+                  onclick="handleAddLesson('${unit.unitId}')">
+            + ${unit.lessons.length + 1}차시 추가
+          </button>
+        `;
+        lessonList.appendChild(addLessonRow);
+      }
+
+      details.appendChild(lessonList);
+      mainList.appendChild(details);
+    });
+
+    if (isTeacherMode) {
+      attachInlineEditEvents();
+    }
+    setupAllMagnifiers();
+  }
+
+  function attachInlineEditEvents() {
+    document.querySelectorAll('.editable-field').forEach(el => {
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          el.blur();
+        }
+      });
+
+      el.addEventListener('blur', () => {
+        const targetType = el.getAttribute('data-target');
+        const unitId = el.getAttribute('data-uid');
+        const lessonNum = parseInt(el.getAttribute('data-ln'), 10);
+        let text = el.innerText.trim();
+
+        const currentGrade = curriculumData.find(g => g.gradeId === currentGradeId);
+        if (!currentGrade) return;
+        const unit = currentGrade.units.find(u => u.unitId === unitId);
+        if (!unit) return;
+
+        if (targetType === 'unit-title') {
+          unit.title = text || "단원 제목";
+        } else if (targetType === 'unit-badge') {
+          const parts = text.split('›');
+          unit.major = parts[0] ? parts[0].trim() : unit.major;
+          unit.minor = parts[1] ? parts[1].trim() : unit.minor;
+        } else if (targetType === 'lesson-title') {
+          const lesson = unit.lessons.find(l => l.n === lessonNum);
+          if (lesson) lesson.title = text || "차시 수업 제목";
+        } else if (targetType === 'lesson-question') {
+          text = text.replace(/^[“"']+|[”"']+$/g, '');
+          const lesson = unit.lessons.find(l => l.n === lessonNum);
+          if (lesson) lesson.question = text || "핵심 질문을 입력하세요";
+        } else if (targetType === 'lesson-meta') {
+          const parts = text.split('·');
+          const lesson = unit.lessons.find(l => l.n === lessonNum);
+          if (lesson) {
+            lesson.pages = parts[0] ? parts[0].trim() : lesson.pages;
+            const slidePart = parts[1] ? parseInt(parts[1].replace(/[^0-9]/g, ''), 10) : lesson.slides;
+            lesson.slides = isNaN(slidePart) ? 10 : slidePart;
+          }
+        }
+
+        saveCurriculumData();
+      });
+    });
+  }
+
+  window.handleAddLesson = function(unitId) {
+    const currentGrade = curriculumData.find(g => g.gradeId === currentGradeId);
+    if (!currentGrade) return;
+    const unit = currentGrade.units.find(u => u.unitId === unitId);
+    if (!unit) return;
+
+    const nextN = unit.lessons.length + 1;
+    unit.lessons.push({
+      n: nextN,
+      title: `${nextN}차시 신규 탐구 주제`,
+      question: "오늘 수업의 핵심 탐구 질문은 무엇일까요?",
+      pages: "00~00p",
+      slides: 10
+    });
+
+    saveCurriculumData();
+    renderCurriculum();
+  };
+
+  window.handleCheckClick = function(key) {
+    if (!isTeacherMode) {
+      alert("🔒 차시 완료 체크는 '교사 모드'에서만 변경할 수 있습니다.");
+      return;
+    }
+    let completed = JSON.parse(localStorage.getItem('daeyoung_completed_lessons') || '[]');
+    if (completed.includes(key)) {
+      completed = completed.filter(k => k !== key);
+    } else {
+      completed.push(key);
+    }
+    localStorage.setItem('daeyoung_completed_lessons', JSON.stringify(completed));
+    renderCurriculum();
+  };
+
+  const btnStudent = document.getElementById('btnRoleStudent');
+  const btnTeacher = document.getElementById('btnRoleTeacher');
+  const TEACHER_PIN = "2027";
+
+  btnStudent.onclick = () => {
+    isTeacherMode = false;
+    document.body.classList.remove('is-teacher-mode');
+    btnStudent.classList.add('active');
+    btnTeacher.classList.remove('active');
+    renderGradeTabs();
+    renderCurriculum();
+  };
+
+  btnTeacher.onclick = () => {
+    if (!isTeacherMode) {
+      const inputPin = prompt("🔒 [교사 전용 보안 모드]\n선생님 마스터 비밀번호를 입력해 주세요 (기본: 2027):");
+      if (inputPin !== TEACHER_PIN) {
+        alert("❌ 비밀번호가 올바르지 않습니다.\n학생은 교사 모드에 접근할 수 없습니다.");
+        return;
+      }
+    }
+    isTeacherMode = true;
+    document.body.classList.add('is-teacher-mode');
+    btnTeacher.classList.add('active');
+    btnStudent.classList.remove('active');
+    renderGradeTabs();
+    renderCurriculum();
+  };
+
+  const quotes = [
+    { q: "자연이라는 위대한 책은 수학의 언어로 쓰여 있다.", a: "갈릴레오 갈릴레이" },
+    { q: "내가 더 멀리 보았다면, 그것은 거인들의 어깨 위에 서 있었기 때문이다.", a: "아이작 뉴턴" },
+    { q: "과학은 단순한 지식의 집합이 아니라, 생각하는 방식이다.", a: "칼 세이건" },
+    { q: "어제와 똑같이 살면서 다른 미래를 기대하는 것은 정신병 초기증세이다.", a: "알베르트 아인슈타인" },
+    { q: "모든 물질은 입자이자 파동이며, 자연은 관측에 답한다.", a: "닐스 보어" },
+    { q: "우리는 우주를 탐구함으로써 결국 우리 자신을 이해하게 된다.", a: "칼 세이건" }
+  ];
+
+  const quoteCard = document.getElementById('quoteCard');
+  const quoteText = document.getElementById('quoteText');
+  const quoteAuthor = document.getElementById('quoteAuthor');
+  let currentQuoteIndex = 0;
+  let quoteTimer = null;
+
+  document.addEventListener('mousemove', (e) => {
+    const onInteractive = e.target.closest('.container') && (e.target.closest('.unit-card') || e.target.closest('.action-banner') || e.target.closest('.hub-header'));
+    
+    if (!onInteractive) {
+      quoteCard.style.left = e.clientX + 'px';
+      quoteCard.style.top = e.clientY + 'px';
+      quoteCard.classList.add('active');
+
+      if (!quoteTimer) {
+        quoteTimer = setTimeout(() => {
+          currentQuoteIndex = (currentQuoteIndex + 1) % quotes.length;
+          quoteText.innerHTML = `&ldquo;${quotes[currentQuoteIndex].q}&rdquo;`;
+          quoteAuthor.innerHTML = `&mdash; ${quotes[currentQuoteIndex].a}`;
+          quoteTimer = null;
+        }, 3500);
+      }
+    } else {
+      quoteCard.classList.remove('active');
+    }
+  });
+
+  document.addEventListener('mouseleave', () => {
+    quoteCard.classList.remove('active');
+  });
+
+  const lens = document.getElementById('globalMagnifierLens');
+  const lensContent = document.getElementById('magnifierLensContent');
+  const LENS_RADIUS = 70;
+  const ZOOM_FACTOR = 1.45;
+
+  function initMagnifier(el) {
+    if (!el || el.dataset.magnifierBound) return;
+    el.dataset.magnifierBound = "true";
+
+    el.addEventListener('mouseenter', () => {
+      lens.style.display = 'block';
+      lensContent.innerHTML = el.innerHTML;
+      
+      const comp = window.getComputedStyle(el);
+      lensContent.style.fontFamily = comp.fontFamily;
+      lensContent.style.fontSize = comp.fontSize;
+      lensContent.style.fontWeight = comp.fontWeight;
+      lensContent.style.color = comp.color;
+      lensContent.style.webkitTextStroke = comp.webkitTextStroke || comp['-webkit-text-stroke'] || '';
+      lensContent.style.webkitTextFillColor = comp.webkitTextFillColor || comp['-webkit-text-fill-color'] || '';
+      lensContent.style.textShadow = comp.textShadow;
+      lensContent.style.letterSpacing = comp.letterSpacing;
+      lensContent.style.lineHeight = comp.lineHeight;
+    });
+
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+
+      lens.style.left = mouseX + 'px';
+      lens.style.top = mouseY + 'px';
+
+      const relX = mouseX - rect.left;
+      const relY = mouseY - rect.top;
+
+      lensContent.style.left = (LENS_RADIUS - relX * ZOOM_FACTOR) + 'px';
+      lensContent.style.top = (LENS_RADIUS - relY * ZOOM_FACTOR) + 'px';
+      lensContent.style.transform = `scale(${ZOOM_FACTOR})`;
+    });
+
+    el.addEventListener('mouseleave', () => {
+      lens.style.display = 'none';
+      lensContent.innerHTML = '';
+    });
+  }
+
+  function setupAllMagnifiers() {
+    const mainTitle = document.getElementById('mainTitle');
+    if (mainTitle) initMagnifier(mainTitle);
+
+    document.querySelectorAll('.unit-heading').forEach(heading => {
+      initMagnifier(heading);
+    });
+  }
+
+  loadCurriculum();
+  setupAllMagnifiers();
+</script>
+
+</body>
+</html>

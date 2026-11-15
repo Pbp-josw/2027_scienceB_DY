@@ -1,0 +1,129 @@
+[
+  {
+    "gradeId": "grade-3",
+    "gradeName": "3학년 과학B",
+    "units": [
+      {
+        "unitId": "unit-3-chem-1",
+        "subject": "화학",
+        "stamp": "化",
+        "color": "#E8004F",
+        "major": "Ⅰ. 화학 반응의 규칙과 에너지 변화",
+        "minor": "2. 화학 반응의 규칙",
+        "title": "일정한 질량비로 결합하는 원소",
+        "lessons": [
+          {
+            "n": 1,
+            "title": "일정 성분비 법칙_모형 해석",
+            "question": "A와 2B는 왜 항상 일정한 질량비로 결합할까?",
+            "pages": "32~33p",
+            "slides": 10,
+            "worksheetUrl": "worksheet-sample.html",
+            "slideUrl": "slide-view.html?unit=chem-1&lesson=1"
+          },
+          {
+            "n": 2,
+            "title": "한계 반응물과 양적 관계",
+            "question": "구리와 산소가 반응할 때 한쪽이 남으면 어떻게 될까?",
+            "pages": "34~35p",
+            "slides": 12,
+            "worksheetUrl": "worksheet-sample.html",
+            "slideUrl": "slide-view.html?unit=chem-1&lesson=2"
+          }
+        ]
+      },
+      {
+        "unitId": "unit-3-chem-2",
+        "subject": "화학",
+        "stamp": "化",
+        "color": "#E8004F",
+        "major": "Ⅰ. 화학 반응의 규칙과 에너지 변화",
+        "minor": "3. 화학 반응에서의 에너지 출입",
+        "title": "에너지가 출입하는 화학 반응",
+        "lessons": [
+          {
+            "n": 1,
+            "title": "발열 반응과 흡열 반응",
+            "question": "어떤 화학 반응은 주변을 뜨겁게, 어떤 반응은 차갑게 만들까?",
+            "pages": "42~43p",
+            "slides": 10,
+            "worksheetUrl": "worksheet-sample.html",
+            "slideUrl": "slide-view.html?unit=chem-2&lesson=1"
+          }
+        ]
+      },
+      {
+        "unitId": "unit-3-earth-1",
+        "subject": "지구과학",
+        "stamp": "地",
+        "color": "#FFB800",
+        "major": "Ⅱ. 기권과 날씨",
+        "minor": "1. 기권과 지구 기온",
+        "title": "복사 평형을 이루는 지구",
+        "lessons": [
+          {
+            "n": 1,
+            "title": "복사 평형 원리와 흑체",
+            "question": "지구가 태양 에너지를 계속 받는데도 무한정 뜨거워지지 않는 이유는?",
+            "pages": "54~55p",
+            "slides": 10,
+            "worksheetUrl": "worksheet-sample.html",
+            "slideUrl": "slide-view.html?unit=earth-1&lesson=1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gradeId": "grade-2",
+    "gradeName": "2학년 과학B",
+    "units": [
+      {
+        "unitId": "unit-2-phys-1",
+        "subject": "물리",
+        "stamp": "物",
+        "color": "#5200FF",
+        "major": "Ⅰ. 물질의 구성",
+        "minor": "1. 원소와 원자",
+        "title": "물질을 이루는 기본 성분",
+        "lessons": [
+          {
+            "n": 1,
+            "title": "원소의 구별과 불꽃 반응",
+            "question": "눈에 보이지 않는 원소를 어떻게 색깔로 구별할 수 있을까?",
+            "pages": "14~17p",
+            "slides": 8,
+            "worksheetUrl": "worksheet-sample.html",
+            "slideUrl": "slide-view.html?unit=phys-1&lesson=1"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "gradeId": "grade-1",
+    "gradeName": "1학년 과학B",
+    "units": [
+      {
+        "unitId": "unit-1-bio-1",
+        "subject": "생명과학",
+        "stamp": "生",
+        "color": "#00C896",
+        "major": "Ⅰ. 지권의 변화",
+        "minor": "1. 생물의 다양성",
+        "title": "생물 다양성과 분류",
+        "lessons": [
+          {
+            "n": 1,
+            "title": "생물 다양성의 의미와 중요성",
+            "question": "생태계에서 왜 다양한 생물이 공존해야 할까?",
+            "pages": "12~15p",
+            "slides": 8,
+            "worksheetUrl": "worksheet-sample.html",
+            "slideUrl": "slide-view.html?unit=bio-1&lesson=1"
+          }
+        ]
+      }
+    ]
+  }
+]
